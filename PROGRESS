@@ -1,0 +1,24 @@
+# 📅 Project Progress Log
+
+## Day 1 — 10 March 2026
+
+**Phase:** Project Setup & Planning
+
+**What I did:**
+- Read and understood the full project scope
+- Defined aim, objectives, stakeholders, and deliverables across 7 files
+- Researched the CSO PxStat API and confirmed CJA07 as the primary dataset
+- Created GitHub repository with README and .gitignore
+- Created project progress tracker
+- Downloaded CJA07 from CSO PxStat API — 173,712 rows across 564 stations, 14 offence groups, 22 years (2003–2024)
+- Ran initial inspection — shape, nulls, duplicates, data types, unique value counts
+
+**Key decisions made:**
+- Pulled data directly via the CSO PxStat REST API — no manual CSV download, keeps the pipeline reproducible
+- Used `station_code` as the primary station identifier rather than name — 3 station names (Blackrock, Milford, Newport) appear in multiple counties so names are not unique
+- Confirmed no duplicates at the Year × Station × Offence level
+- Dropped `Statistic Label` and `UNIT` columns — single value columns with no analytical use
+
+**Outcome:** Project foundation established. Repository live on GitHub. Dataset loaded and understood.
+
+---
