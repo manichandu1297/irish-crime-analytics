@@ -61,3 +61,60 @@
 
 **Outcome:** File 1 complete. Clean structured dataset saved and ready for File 2 risk metrics.
 
+---
+## Day 4 — 16 March 2026
+
+**Phase:** File 2 — Risk Metrics & Geographic Profile
+
+**What I did:**
+- Started building the risk metrics notebook
+- Added county mapping from division names — mapped 564 stations across 21 analytical units
+- Defined two comparison windows — historical baseline 2015–2019 and recent period 2020–2024
+- Calculated total incidents for each station in both windows
+- Investigated stations with zero historical incidents — confirmed as genuine new activity, not missing data
+
+**Key decisions made:**
+- Used division names as the geographic unit rather than the 26 counties — CSO data is structured by Garda division not county boundaries
+- Chose 2015–2019 as historical baseline and 2020–2024 as recent window — gives a clean pre-COVID vs post-COVID comparison
+- Added new_activity_flag for stations that had no incidents in the historical window but do in the recent window
+
+**Outcome:** Base incident aggregations done. County mapping complete. Ready to build the risk formula tomorrow.
+
+---
+## Day 5 — 17 March 2026
+
+**Phase:** File 2 — Risk Metrics & Geographic Profile
+
+**What I did:**
+- Built the growth rate calculation — recent vs historical incident volumes per station
+- Investigated outlier growth rates — some stations showed 10x or 20x growth due to very small historical base
+- Applied growth cap at 10x to stop small-base stations dominating the risk index
+- Built the Risk Index v1 formula — 0.6 × normalised recent volume + 0.4 × normalised growth rate
+- Min-max normalised both components so they are on the same scale before combining
+
+**Key decisions made:**
+- Capped growth ratio at 10x — a station going from 2 to 25 incidents is not genuinely 12x riskier than a station going from 500 to 1000, the cap prevents distortion
+- Used min-max normalisation rather than standard scaling — keeps values between 0 and 1 which makes the weighted formula intuitive
+- Weighted recent volume higher than growth (0.6 vs 0.4) — current workload is a more reliable signal than growth rate alone
+
+**Outcome:** Risk Index v1 built and ranked across all 564 stations. Growth capping logic validated. Ready for offence-level breakdown and final outputs tomorrow.
+
+---
+## Day 6 — 18 March 2026
+
+**Phase:** File 2 — Risk Metrics & Geographic Profile (completion)
+
+**What I did:**
+- Built station × offence level metrics — growth rate and volume for each of the 14 offence groups per station
+- Added emerging offence flag — stations where a new offence group appeared in recent window that was absent historically
+- Generated sense check plots — top 20 stations by risk index, geographic distribution by county
+- Saved three output files — station_risk_metrics_full.csv, station_offence_metrics.csv, station_risk_metrics.csv
+- Pushed File 2 notebook to GitHub
+- Updated README to mark File 2 as complete
+
+**Key decisions made:**
+- Kept station_risk_metrics_full.csv as the master station file — 564 rows, one per station, used by all downstream files
+- Saved a separate top 20 summary CSV for quick reference without loading the full file
+
+**Outcome:** File 2 complete. Risk Index v1 scores and ranks available for all 564 stations. Offence-level breakdown ready for File 3 clustering.
+
