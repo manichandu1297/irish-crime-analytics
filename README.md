@@ -152,8 +152,8 @@ requests
 | File | Description | Status |
 |---|---|---|
 | File 1 | Data Ingestion & Cleaning | ✅ Completed |
-| File 2 | Risk Metrics & Geographic Profile | ⏳ In Progress |
-| File 3 | Station Strategy Clustering | ⏳ Pending |
+| File 2 | Risk Metrics & Geographic Profile | ✅ Completed |
+| File 3 | Station Strategy Clustering | 🔄 In Progress |
 | File 4 | SQL Analytical Warehouse | ⏳ Pending |
 | File 5 | Power BI Dashboard | ⏳ Pending |
 | File 6 | Forecasting & Early Warning | ⏳ Pending |
