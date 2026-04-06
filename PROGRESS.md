@@ -118,3 +118,82 @@
 
 **Outcome:** File 2 complete. Risk Index v1 scores and ranks available for all 564 stations. Offence-level breakdown ready for File 3 clustering.
 
+---
+## Day 7 — 24 March 2026
+
+**Phase:** File 3 — Station Strategy Clustering
+
+**What I did:**
+- Started building the clustering notebook
+- Aggregated station × offence metrics into a single station-level feature matrix — 564 rows, one per station
+- Engineered 9 features: total_volume_recent, station_growth_unweighted, hhi, growth_volatility, emerging_count, num_active_offences, share_growth_positive, risk_intensity
+- Checked feature distributions — identified 3 heavily skewed features and applied log transformation
+- Investigated correlation between features — found top_offence_share and HHI were nearly identical (r=0.96)
+
+**Key decisions made:**
+- Dropped top_offence_share — r=0.96 with HHI means they carry almost identical information, keeping both would double-count concentration in the model
+- Log-transformed 3 skewed features — clustering algorithms are sensitive to scale and outliers, transformation brings them in line
+- Kept urban_station_flag out of the feature matrix — used for validation only, not as a clustering input
+
+**Outcome:** Feature matrix ready. Correlation issues resolved. Ready to run clustering and select k tomorrow.
+
+---
+## Day 8 — 25 March 2026
+
+**Phase:** File 3 — Station Strategy Clustering
+
+**What I did:**
+- Ran K-Means clustering for k=2 through k=10
+- Plotted silhouette scores and inertia to find the right number of clusters
+- Tested k=4 and k=7 — both gave similar silhouette scores around 0.20
+- Chose k=4 over k=7 — more interpretable for a planning audience
+- Labelled the 4 clusters based on their feature profiles
+- Validated clusters using ANOVA and chi-square tests
+
+**Key decisions made:**
+- Selected k=4 — same silhouette as k=7 but 4 clusters are much easier to explain to a non-technical planner. More clusters does not always mean better analysis
+- Silhouette of 0.20 is low but expected — real-world station data does not form clean separate blobs, there is genuine overlap between station types
+- Named clusters descriptively — National Workhorses, Emerging Growth, Low-Volume Rural, Specialised Baseline — so the labels carry meaning without needing to read the methodology
+
+**Outcome:** 4 clusters selected and validated. ANOVA p<0.001, chi-square p<0.001 — cluster separation is statistically significant despite the modest silhouette score.
+
+---
+## Day 9 — 27 March 2026
+
+**Phase:** File 3 — Station Strategy Clustering (completion) + File 4 start
+
+**What I did:**
+- Generated cluster profile visualisations — radar chart per cluster, feature distribution boxplots
+- Saved Garda_Station_Strategy_Master.csv — 564 rows, 11 columns including cluster label, county, urban flag, HHI
+- Pushed File 3 notebook to GitHub and updated README
+- Started File 4 — SQL Analytical Warehouse
+- Set up PostgreSQL connection using SQLAlchemy
+- Designed star schema — 4 dimension tables and 2 fact tables
+- Created and loaded all dimension tables — dim_station, dim_offence, dim_division, dim_year
+
+**Key decisions made:**
+- Used star schema rather than a flat table — makes the SQL queries cleaner and mirrors how a real analytics warehouse would be structured
+- Used SQLAlchemy for the database connection — keeps the Python-to-SQL pipeline clean and avoids raw psycopg2 connection strings in the notebook
+
+**Outcome:** File 3 complete. Star schema designed and dimension tables loaded. Ready to load fact tables and write analytical queries tomorrow.
+
+---
+## Day 10 — 28 March 2026
+
+**Phase:** File 4 — SQL Analytical Warehouse (completion)
+
+**What I did:**
+- Loaded fact_crime_incidents — 173,712 rows
+- Loaded fact_station_offence_window — 7,896 rows covering recent and historical aggregations
+- Created 7 indexes for query performance
+- Built 5 reporting views covering top stations, cluster summaries, offence trends, county rankings, and year-on-year comparisons
+- Wrote 15 analytical queries covering resource allocation, emerging hotspots, offence concentration, and geographic distribution
+- Pushed File 4 notebook to GitHub and updated README to mark Files 3 and 4 as complete
+
+**Key decisions made:**
+- Built views rather than saving query results as tables — views stay in sync if the underlying data changes and are better practice for a reporting layer
+- Added 7 indexes on commonly joined and filtered columns — without indexes, queries on 173,712 rows slow down significantly
+- Wrote queries in plain SQL with comments explaining the business question each one answers — makes the notebook readable to someone without a data background
+
+**Outcome:** File 4 complete. Full star schema warehouse live with 6 tables, 7 indexes, 5 views and 15 analytical queries. Pipeline is now 4 files deep end to end.
+
