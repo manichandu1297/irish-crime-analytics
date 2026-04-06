@@ -156,7 +156,7 @@ requests
 | File 3 | Station Strategy Clustering | ✅ Completed |
 | File 4 | SQL Analytical Warehouse |  ✅ Completed |
 | File 5 | Power BI Dashboard | ⏳ Pending |
-| File 6 | Forecasting & Early Warning | ⏳ Pending |
+| File 6 | Forecasting & Early Warning | 🔄 In Progress |
 | File 7 | Risk Index v2 & Scenario Simulation | ⏳ Pending |
 
 ---
